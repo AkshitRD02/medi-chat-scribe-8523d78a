@@ -1,7 +1,9 @@
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { useState } from "react";
-import { QrCode, Loader2, Check } from "lucide-react";
+import { QrCode, Loader as Loader2, Check } from "lucide-react";
 import { setKioskState, useKiosk, resetKiosk } from "@/lib/kiosk-store";
+import { useT } from "@/lib/i18n";
+import { LanguageSelector } from "@/components/language-selector";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -22,10 +24,9 @@ export const Route = createFileRoute("/")({
   component: WelcomeScreen,
 });
 
-const LANGUAGES = ["English", "हिंदी", "मराठी", "தமிழ்"];
-
 function WelcomeScreen() {
   const { language, consented } = useKiosk();
+  const t = useT();
   const [scanning, setScanning] = useState(false);
   const [scanned, setScanned] = useState<string | null>(null);
   const navigate = useNavigate();
@@ -49,37 +50,24 @@ function WelcomeScreen() {
           <div className="mb-6 inline-flex items-center gap-2 rounded-full bg-white px-3 py-1 ring-1 ring-zinc-950/5">
             <span className="size-2 animate-pulse rounded-full bg-medical-green" />
             <span className="text-xs font-medium uppercase tracking-wider text-zinc-500">
-              Station 04 • Active
+              {t.stationActive}
             </span>
           </div>
           <h1 className="mb-4 text-balance text-4xl font-medium tracking-tight text-zinc-900 md:text-5xl">
-            Welcome to MediKiosk
+            {t.welcomeTitle}
           </h1>
           <p className="mx-auto max-w-[56ch] text-pretty text-lg text-zinc-600">
-            Please prepare your ABHA ID or scan the QR code to begin your digital intake process.
+            {t.welcomeSubtitle}
           </p>
         </header>
 
         <div className="rounded-[24px] bg-white p-8 shadow-sm ring-1 ring-zinc-950/5">
           <div className="flex flex-col gap-6">
-            <div className="flex flex-col gap-2">
-              <label className="ml-1 text-sm font-medium text-zinc-500">Preferred Language</label>
-              <div className="flex flex-wrap gap-2">
-                {LANGUAGES.map((lang) => (
-                  <button
-                    key={lang}
-                    onClick={() => setKioskState({ language: lang })}
-                    className={`min-h-12 rounded-xl px-5 py-2.5 text-sm font-medium transition-colors ${
-                      language === lang
-                        ? "bg-zinc-900 text-zinc-50"
-                        : "bg-zinc-100 text-zinc-600 hover:bg-zinc-200"
-                    }`}
-                  >
-                    {lang}
-                  </button>
-                ))}
-              </div>
-            </div>
+            <LanguageSelector
+              label={t.preferredLanguage}
+              value={language}
+              onChange={(lang) => setKioskState({ language: lang })}
+            />
 
             <label className="flex items-start gap-3 rounded-xl bg-zinc-50 p-4 ring-1 ring-zinc-950/5">
               <input
@@ -88,10 +76,7 @@ function WelcomeScreen() {
                 onChange={(e) => setKioskState({ consented: e.target.checked })}
                 className="mt-0.5 size-5 shrink-0 accent-clinical-teal"
               />
-              <span className="text-sm leading-relaxed text-zinc-600">
-                I consent to MediKiosk collecting my symptoms and health records for this
-                consultation and sharing them with my treating physician.
-              </span>
+              <span className="text-sm leading-relaxed text-zinc-600">{t.consent}</span>
             </label>
 
             <button
@@ -109,18 +94,20 @@ function WelcomeScreen() {
                 )}
               </span>
               <span className="text-lg font-medium text-zinc-900">
-                {scanned ? `Verified · ${scanned}` : scanning ? "Scanning…" : "Scan ABHA QR Code"}
+                {scanned
+                  ? `${t.verified} · ${scanned}`
+                  : scanning
+                    ? t.scanning
+                    : t.scanTitle}
               </span>
               <span className="text-sm text-zinc-500">
-                {consented
-                  ? "Position your ID card within the frame"
-                  : "Please accept the consent above to continue"}
+                {consented ? t.scanHelpConsented : t.scanHelpNoConsent}
               </span>
             </button>
 
             <div className="flex items-center gap-4">
               <span className="h-px flex-1 bg-zinc-950/5" />
-              <span className="text-xs font-medium uppercase text-zinc-400">or</span>
+              <span className="text-xs font-medium uppercase text-zinc-400">{t.or}</span>
               <span className="h-px flex-1 bg-zinc-950/5" />
             </div>
 
@@ -134,7 +121,7 @@ function WelcomeScreen() {
               disabled={!consented}
               className="min-h-14 w-full rounded-xl py-4 font-medium text-clinical-teal transition-colors hover:bg-clinical-teal/5 disabled:opacity-50"
             >
-              Enter ABHA Number Manually
+              {t.manualEntry}
             </button>
           </div>
         </div>

@@ -1,7 +1,7 @@
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { useServerFn } from "@tanstack/react-start";
 import { useEffect, useRef, useState } from "react";
-import { FileText, Loader2, Plus, Send, ArrowRight } from "lucide-react";
+import { FileText, Loader as Loader2, Plus, Send, ArrowRight } from "lucide-react";
 import { intakeTurn } from "@/lib/intake.functions";
 import {
   MOCK_EXTRACTION,
@@ -9,8 +9,10 @@ import {
   nowLabel,
   setKioskState,
   useKiosk,
+  effectiveMessages,
   type SocratesKey,
 } from "@/lib/kiosk-store";
+import { useT } from "@/lib/i18n";
 
 export const Route = createFileRoute("/chat")({
   head: () => ({
@@ -35,6 +37,7 @@ const KEYS = Object.keys(SOCRATES_LABELS) as SocratesKey[];
 
 function ChatScreen() {
   const state = useKiosk();
+  const t = useT();
   const send = useServerFn(intakeTurn);
   const navigate = useNavigate();
   const [draft, setDraft] = useState("");
@@ -43,9 +46,11 @@ function ChatScreen() {
   const [uploading, setUploading] = useState(false);
   const scrollRef = useRef<HTMLDivElement>(null);
 
+  const messages = effectiveMessages(state);
+
   useEffect(() => {
     scrollRef.current?.scrollTo({ top: scrollRef.current.scrollHeight, behavior: "smooth" });
-  }, [state.messages.length, state.extracted, busy]);
+  }, [messages.length, state.extracted, busy]);
 
   const submit = async () => {
     const text = draft.trim();
@@ -78,7 +83,7 @@ function ChatScreen() {
         summary: result.summary ?? s.summary,
       }));
     } catch (e) {
-      setError(e instanceof Error ? e.message : "Something went wrong. Please try again.");
+      setError(e instanceof Error ? e.message : t.genericError);
     } finally {
       setBusy(false);
     }
@@ -105,8 +110,8 @@ function ChatScreen() {
                 AI
               </span>
               <div>
-                <p className="text-sm font-semibold text-zinc-900">Clinical Intake Assistant</p>
-                <p className="text-xs text-zinc-500">Powered by SOCRATES framework</p>
+                <p className="text-sm font-semibold text-zinc-900">{t.assistantName}</p>
+                <p className="text-xs text-zinc-500">{t.assistantSubtitle}</p>
               </div>
             </div>
             <div className="hidden gap-1 sm:flex">
@@ -123,7 +128,7 @@ function ChatScreen() {
           </header>
 
           <div ref={scrollRef} className="flex flex-1 flex-col gap-8 overflow-y-auto p-6">
-            {state.messages.map((m, i) =>
+            {messages.map((m, i) =>
               m.role === "assistant" ? (
                 <div key={i} className="flex max-w-[80%] flex-col gap-2">
                   <div className="rounded-2xl rounded-tl-none bg-zinc-100 p-4">
@@ -149,7 +154,7 @@ function ChatScreen() {
 
             {busy && (
               <div className="flex items-center gap-2 text-xs text-zinc-400">
-                <Loader2 className="size-3.5 animate-spin" /> Assistant is typing…
+                <Loader2 className="size-3.5 animate-spin" /> {t.typing}
               </div>
             )}
 
@@ -160,7 +165,7 @@ function ChatScreen() {
                     <FileText className="size-4 text-clinical-blue" strokeWidth={1.5} />
                   </span>
                   <span className="text-sm font-semibold text-clinical-blue">
-                    {state.extracted.fileName} extracted
+                    {state.extracted.fileName} {t.extracted}
                   </span>
                 </div>
                 <div className="grid grid-cols-2 gap-4">
@@ -183,7 +188,7 @@ function ChatScreen() {
             <div className="flex items-center gap-2 rounded-xl bg-zinc-50 p-2 ring-1 ring-zinc-950/10">
               <button
                 onClick={upload}
-                aria-label="Upload a medical document"
+                aria-label={t.uploadLabel}
                 className="min-h-11 min-w-11 p-2 text-zinc-400 transition-colors hover:text-zinc-600"
               >
                 {uploading ? (
@@ -199,13 +204,13 @@ function ChatScreen() {
                   if (e.key === "Enter") void submit();
                 }}
                 type="text"
-                placeholder="Describe your symptoms..."
+                placeholder={t.inputPlaceholder}
                 className="min-h-11 flex-1 border-none bg-transparent px-1 py-2 text-sm outline-none placeholder:text-zinc-400"
               />
               <button
                 onClick={() => void submit()}
                 disabled={busy || !draft.trim()}
-                aria-label="Send"
+                aria-label={t.sendLabel}
                 className="min-h-11 min-w-11 rounded-lg bg-clinical-teal p-2 text-primary-foreground disabled:opacity-40"
               >
                 <Send className="mx-auto size-4" strokeWidth={1.5} />
@@ -215,14 +220,12 @@ function ChatScreen() {
         </div>
 
         <div className="flex items-center justify-between px-2">
-          <p className="text-xs text-zinc-500">
-            {capturedCount} of 8 SOCRATES markers captured
-          </p>
+          <p className="text-xs text-zinc-500">{t.markers(capturedCount)}</p>
           <button
             onClick={() => navigate({ to: "/summary" })}
             className="flex min-h-11 items-center gap-2 rounded-lg bg-white px-4 text-sm font-medium text-zinc-900 shadow-sm ring-1 ring-zinc-950/5"
           >
-            View clinical summary <ArrowRight className="size-4" strokeWidth={1.5} />
+            {t.viewSummary} <ArrowRight className="size-4" strokeWidth={1.5} />
           </button>
         </div>
       </div>

@@ -2,6 +2,7 @@ import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { useState } from "react";
 import { Check, Pencil, CalendarDays } from "lucide-react";
 import { setKioskState, useKiosk } from "@/lib/kiosk-store";
+import { useT } from "@/lib/i18n";
 
 export const Route = createFileRoute("/summary")({
   head: () => ({
@@ -24,12 +25,13 @@ export const Route = createFileRoute("/summary")({
 
 function SummaryScreen() {
   const state = useKiosk();
+  const t = useT();
   const navigate = useNavigate();
   const [editing, setEditing] = useState(false);
 
   const summary = state.summary ?? {
-    chiefComplaint: "Awaiting completion of the symptom interview.",
-    hpi: "The patient interview is still in progress. Return to the intake chat so the assistant can complete the SOCRATES assessment.",
+    chiefComplaint: t.awaitingComplaint,
+    hpi: t.awaitingHpi,
     pastMedicalHistory: [],
     socratesTags: [],
   };
@@ -42,11 +44,13 @@ function SummaryScreen() {
       <div className="mx-auto max-w-xl">
         <div className="mb-8 flex items-center justify-between">
           <div>
-            <h1 className="text-2xl font-medium text-zinc-900">Clinical Summary</h1>
-            <p className="text-sm text-zinc-500">Patient ID: {state.abhaId ?? "Not verified"}</p>
+            <h1 className="text-2xl font-medium text-zinc-900">{t.summaryTitle}</h1>
+            <p className="text-sm text-zinc-500">
+              {t.patientId}: {state.abhaId ?? t.notVerified}
+            </p>
           </div>
           <div className="rounded-md bg-zinc-100 px-3 py-1 text-[10px] font-medium uppercase tracking-wider text-zinc-500">
-            {state.confirmed ? "Filed" : "Draft Record"}
+            {state.confirmed ? t.filed : t.draft}
           </div>
         </div>
 
@@ -54,7 +58,7 @@ function SummaryScreen() {
           <div className="divide-y divide-zinc-950/5">
             <section className="p-6">
               <h2 className="mb-3 text-xs font-medium uppercase tracking-widest text-zinc-400">
-                Chief Complaint
+                {t.chiefComplaint}
               </h2>
               {editing ? (
                 <textarea
@@ -71,7 +75,7 @@ function SummaryScreen() {
 
             <section className="p-6">
               <h2 className="mb-3 text-xs font-medium uppercase tracking-widest text-zinc-400">
-                History of Present Illness
+                {t.hpi}
               </h2>
               <div className="space-y-3">
                 {editing ? (
@@ -100,7 +104,7 @@ function SummaryScreen() {
 
             <section className="p-6">
               <h2 className="mb-3 text-xs font-medium uppercase tracking-widest text-zinc-400">
-                Past Medical History
+                {t.pmh}
               </h2>
               {editing ? (
                 <textarea
@@ -120,13 +124,13 @@ function SummaryScreen() {
                   ))}
                 </ul>
               ) : (
-                <p className="text-sm text-zinc-500">Not yet recorded.</p>
+                <p className="text-sm text-zinc-500">{t.notRecorded}</p>
               )}
             </section>
 
             <section className="bg-zinc-50/50 p-6">
               <h2 className="mb-3 text-xs font-medium uppercase tracking-widest text-zinc-400">
-                Extracted Document Data
+                {t.extractedData}
               </h2>
               {state.extracted ? (
                 <div className="space-y-2">
@@ -138,7 +142,7 @@ function SummaryScreen() {
                   ))}
                 </div>
               ) : (
-                <p className="text-sm text-zinc-500">No documents uploaded.</p>
+                <p className="text-sm text-zinc-500">{t.noDocuments}</p>
               )}
             </section>
           </div>
@@ -149,7 +153,7 @@ function SummaryScreen() {
               className="flex min-h-11 items-center gap-2 text-sm font-medium text-zinc-500 transition-colors hover:text-zinc-900"
             >
               <Pencil className="size-4" strokeWidth={1.5} />
-              {editing ? "Done Editing" : "Edit Details"}
+              {editing ? t.doneEditing : t.edit}
             </button>
             <div className="flex items-center gap-3">
               <button
@@ -157,14 +161,14 @@ function SummaryScreen() {
                 className="flex min-h-11 items-center gap-2 rounded-lg bg-white py-2 pl-2 pr-3 text-sm font-medium text-zinc-900 ring-1 ring-zinc-950/5"
               >
                 <CalendarDays className="size-4 shrink-0" strokeWidth={1.5} />
-                Defer
+                {t.defer}
               </button>
               <button
                 onClick={() => setKioskState({ confirmed: true })}
                 className="flex min-h-11 items-center gap-2 rounded-lg bg-clinical-teal py-2 pl-2 pr-3 text-sm font-medium text-primary-foreground shadow-sm ring-1 ring-clinical-teal"
               >
                 <Check className="size-4 shrink-0" strokeWidth={1.5} />
-                {state.confirmed ? "Entry Confirmed" : "Confirm Entry"}
+                {state.confirmed ? t.confirmed : t.confirm}
               </button>
             </div>
           </div>

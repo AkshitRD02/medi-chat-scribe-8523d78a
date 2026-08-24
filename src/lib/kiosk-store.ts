@@ -1,4 +1,5 @@
 import { useSyncExternalStore } from "react";
+import { getDict } from "./i18n";
 
 export type Role = "assistant" | "patient";
 
@@ -58,14 +59,7 @@ export const initialState: KioskState = {
   language: "English",
   consented: false,
   abhaId: null,
-  messages: [
-    {
-      role: "assistant",
-      content:
-        "Hello, I'm here to help prepare your summary for the doctor. What is bothering you today? Please describe your main symptom.",
-      time: "",
-    },
-  ],
+  messages: [],
   captured: [],
   extracted: null,
   summary: null,
@@ -125,6 +119,19 @@ export function useKiosk(): KioskState {
     () => read(),
     () => initialState,
   );
+}
+
+export function getGreeting(language: string): ChatMessage {
+  return { role: "assistant", content: getDict(language).greeting, time: "" };
+}
+
+export function effectiveMessages(state: KioskState): ChatMessage[] {
+  if (state.messages.length === 0) return [getGreeting(state.language)];
+  const hasPatient = state.messages.some((m) => m.role === "patient");
+  if (!hasPatient && state.messages[0]?.role === "assistant") {
+    return [getGreeting(state.language), ...state.messages.slice(1)];
+  }
+  return state.messages;
 }
 
 export const MOCK_EXTRACTION: ExtractedDoc = {

@@ -1,3 +1,5 @@
+import { LANGUAGE_ENGLISH_NAMES } from "./i18n";
+
 const GATEWAY = "https://ai.gateway.lovable.dev/v1/chat/completions";
 const MODEL = "google/gemini-3.7-flash";
 
@@ -43,12 +45,13 @@ export async function runIntakeTurn(
   const apiKey = process.env["LOVABLE_API_KEY"];
   if (!apiKey) throw new Error("Missing LOVABLE_API_KEY");
 
+  const englishName = LANGUAGE_ENGLISH_NAMES[language] ?? language;
   const messages = [
     {
       role: "system",
       content:
         SYSTEM +
-        `\n\nReply to the patient in ${language}. Keep JSON keys and SOCRATES keys in English.` +
+        `\n\nIMPORTANT: Respond to the patient ONLY in ${englishName} (${language}), using its native script. All your questions, follow-ups, and the "reply" field must be in ${englishName}. Keep JSON keys and SOCRATES keys in English.` +
         (extractedNote ? `\n\nUploaded document data available: ${extractedNote}` : ""),
     },
     ...history.map((m) => ({
