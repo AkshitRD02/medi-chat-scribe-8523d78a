@@ -1,0 +1,175 @@
+import { createFileRoute, useNavigate } from "@tanstack/react-router";
+import { useState } from "react";
+import { Check, Pencil, CalendarDays } from "lucide-react";
+import { setKioskState, useKiosk } from "@/lib/kiosk-store";
+
+export const Route = createFileRoute("/summary")({
+  head: () => ({
+    meta: [
+      { title: "Clinical Summary — MediKiosk" },
+      {
+        name: "description",
+        content:
+          "Physician-facing intake summary with chief complaint, history of present illness, past medical history, and extracted document data.",
+      },
+      { property: "og:title", content: "Clinical Summary — MediKiosk" },
+      {
+        property: "og:description",
+        content: "Review, edit, and confirm the kiosk-generated clinical intake record.",
+      },
+    ],
+  }),
+  component: SummaryScreen,
+});
+
+function SummaryScreen() {
+  const state = useKiosk();
+  const navigate = useNavigate();
+  const [editing, setEditing] = useState(false);
+
+  const summary = state.summary ?? {
+    chiefComplaint: "Awaiting completion of the symptom interview.",
+    hpi: "The patient interview is still in progress. Return to the intake chat so the assistant can complete the SOCRATES assessment.",
+    pastMedicalHistory: [],
+    socratesTags: [],
+  };
+
+  const update = (patch: Partial<typeof summary>) =>
+    setKioskState({ summary: { ...summary, ...patch } });
+
+  return (
+    <main className="min-h-screen bg-zinc-50 px-6 py-12 md:py-24">
+      <div className="mx-auto max-w-xl">
+        <div className="mb-8 flex items-center justify-between">
+          <div>
+            <h1 className="text-2xl font-medium text-zinc-900">Clinical Summary</h1>
+            <p className="text-sm text-zinc-500">Patient ID: {state.abhaId ?? "Not verified"}</p>
+          </div>
+          <div className="rounded-md bg-zinc-100 px-3 py-1 text-[10px] font-medium uppercase tracking-wider text-zinc-500">
+            {state.confirmed ? "Filed" : "Draft Record"}
+          </div>
+        </div>
+
+        <div className="overflow-hidden rounded-2xl bg-white shadow-sm ring-1 ring-zinc-950/5">
+          <div className="divide-y divide-zinc-950/5">
+            <section className="p-6">
+              <h2 className="mb-3 text-xs font-medium uppercase tracking-widest text-zinc-400">
+                Chief Complaint
+              </h2>
+              {editing ? (
+                <textarea
+                  value={summary.chiefComplaint}
+                  onChange={(e) => update({ chiefComplaint: e.target.value })}
+                  className="min-h-20 w-full rounded-lg bg-zinc-50 p-3 text-sm text-zinc-900 outline-none ring-1 ring-zinc-950/10 focus:ring-clinical-teal"
+                />
+              ) : (
+                <p className="text-pretty text-sm leading-relaxed text-zinc-900">
+                  {summary.chiefComplaint}
+                </p>
+              )}
+            </section>
+
+            <section className="p-6">
+              <h2 className="mb-3 text-xs font-medium uppercase tracking-widest text-zinc-400">
+                History of Present Illness
+              </h2>
+              <div className="space-y-3">
+                {editing ? (
+                  <textarea
+                    value={summary.hpi}
+                    onChange={(e) => update({ hpi: e.target.value })}
+                    className="min-h-32 w-full rounded-lg bg-zinc-50 p-3 text-sm text-zinc-900 outline-none ring-1 ring-zinc-950/10 focus:ring-clinical-teal"
+                  />
+                ) : (
+                  <p className="text-pretty font-serif text-sm italic leading-relaxed text-zinc-900">
+                    {summary.hpi}
+                  </p>
+                )}
+                <div className="flex flex-wrap gap-2">
+                  {summary.socratesTags.map((tag) => (
+                    <span
+                      key={tag}
+                      className="rounded bg-zinc-100 px-2 py-0.5 text-[10px] font-medium text-zinc-600"
+                    >
+                      {tag}
+                    </span>
+                  ))}
+                </div>
+              </div>
+            </section>
+
+            <section className="p-6">
+              <h2 className="mb-3 text-xs font-medium uppercase tracking-widest text-zinc-400">
+                Past Medical History
+              </h2>
+              {editing ? (
+                <textarea
+                  value={summary.pastMedicalHistory.join("\n")}
+                  onChange={(e) =>
+                    update({ pastMedicalHistory: e.target.value.split("\n").filter(Boolean) })
+                  }
+                  className="min-h-24 w-full rounded-lg bg-zinc-50 p-3 text-sm text-zinc-900 outline-none ring-1 ring-zinc-950/10 focus:ring-clinical-teal"
+                />
+              ) : summary.pastMedicalHistory.length ? (
+                <ul className="space-y-2">
+                  {summary.pastMedicalHistory.map((item) => (
+                    <li key={item} className="flex items-center gap-2 text-sm text-zinc-900">
+                      <span className="size-1 rounded-full bg-zinc-300" />
+                      {item}
+                    </li>
+                  ))}
+                </ul>
+              ) : (
+                <p className="text-sm text-zinc-500">Not yet recorded.</p>
+              )}
+            </section>
+
+            <section className="bg-zinc-50/50 p-6">
+              <h2 className="mb-3 text-xs font-medium uppercase tracking-widest text-zinc-400">
+                Extracted Document Data
+              </h2>
+              {state.extracted ? (
+                <div className="space-y-2">
+                  {state.extracted.fields.map((f) => (
+                    <div key={f.label} className="flex items-center justify-between text-xs">
+                      <span className="font-medium text-zinc-500">{f.label}</span>
+                      <span className="text-zinc-900">{f.value}</span>
+                    </div>
+                  ))}
+                </div>
+              ) : (
+                <p className="text-sm text-zinc-500">No documents uploaded.</p>
+              )}
+            </section>
+          </div>
+
+          <div className="flex items-center justify-between border-t border-zinc-950/5 bg-zinc-50/30 p-6">
+            <button
+              onClick={() => setEditing((v) => !v)}
+              className="flex min-h-11 items-center gap-2 text-sm font-medium text-zinc-500 transition-colors hover:text-zinc-900"
+            >
+              <Pencil className="size-4" strokeWidth={1.5} />
+              {editing ? "Done Editing" : "Edit Details"}
+            </button>
+            <div className="flex items-center gap-3">
+              <button
+                onClick={() => navigate({ to: "/chat" })}
+                className="flex min-h-11 items-center gap-2 rounded-lg bg-white py-2 pl-2 pr-3 text-sm font-medium text-zinc-900 ring-1 ring-zinc-950/5"
+              >
+                <CalendarDays className="size-4 shrink-0" strokeWidth={1.5} />
+                Defer
+              </button>
+              <button
+                onClick={() => setKioskState({ confirmed: true })}
+                className="flex min-h-11 items-center gap-2 rounded-lg bg-clinical-teal py-2 pl-2 pr-3 text-sm font-medium text-primary-foreground shadow-sm ring-1 ring-clinical-teal"
+              >
+                <Check className="size-4 shrink-0" strokeWidth={1.5} />
+                {state.confirmed ? "Entry Confirmed" : "Confirm Entry"}
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </main>
+  );
+}
