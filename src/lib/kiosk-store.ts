@@ -63,7 +63,7 @@ export const initialState: KioskState = {
       role: "assistant",
       content:
         "Hello, I'm here to help prepare your summary for the doctor. What is bothering you today? Please describe your main symptom.",
-      time: nowLabel(),
+      time: "",
     },
   ],
   captured: [],

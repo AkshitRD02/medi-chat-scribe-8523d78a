@@ -130,7 +130,7 @@ function ChatScreen() {
                     <p className="text-pretty text-sm leading-relaxed text-zinc-800">{m.content}</p>
                   </div>
                   <span className="px-1 text-[10px] font-medium uppercase text-zinc-400">
-                    AI • {m.time}
+                    AI{m.time ? ` • ${m.time}` : ""}
                   </span>
                 </div>
               ) : (
