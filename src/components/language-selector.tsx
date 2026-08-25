@@ -1,7 +1,19 @@
 import { useState, useRef, useEffect } from "react";
 import { Check, ChevronDown, Search, Globe } from "lucide-react";
 import { LANGUAGES, LANGUAGE_ENGLISH_NAMES } from "@/lib/i18n";
+import { useKiosk } from "@/lib/kiosk-store";
 import { cn } from "@/lib/utils";
+
+const SEARCH_TEXT: Record<string, { search: string; empty: string }> = {
+  English: { search: "Search language...", empty: "No languages found" },
+  "हिंदी": { search: "भाषा खोजें...", empty: "कोई भाषा नहीं मिली" },
+  "বাংলা": { search: "ভাষা খুঁজুন...", empty: "কোনো ভাষা পাওয়া যায়নি" },
+  "தமிழ்": { search: "மொழியைத் தேடுங்கள்...", empty: "மொழி எதுவும் இல்லை" },
+  "తెలుగు": { search: "భాషను వెతకండి...", empty: "భాషలు కనబడలేదు" },
+  "मराठी": { search: "भाषा शोधा...", empty: "कोणतीही भाषा सापडली नाही" },
+  "ગુજરાતી": { search: "ભાષા શોધો...", empty: "કોઈ ભાષા મળી નથી" },
+  "ಕನ್ನಡ": { search: "ಭಾಷೆ ಹುಡುಕಿ...", empty: "ಯಾವುದೇ ಭಾಷೆ ಸಿಗಲಿಲ್ಲ" },
+};
 
 type LanguageSelectorProps = {
   value: string;
