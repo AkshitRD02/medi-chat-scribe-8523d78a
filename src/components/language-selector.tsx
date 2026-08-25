@@ -1,7 +1,19 @@
 import { useState, useRef, useEffect } from "react";
 import { Check, ChevronDown, Search, Globe } from "lucide-react";
 import { LANGUAGES, LANGUAGE_ENGLISH_NAMES } from "@/lib/i18n";
+import { useKiosk } from "@/lib/kiosk-store";
 import { cn } from "@/lib/utils";
+
+const SEARCH_TEXT: Record<string, { search: string; empty: string }> = {
+  English: { search: "Search language...", empty: "No languages found" },
+  "हिंदी": { search: "भाषा खोजें...", empty: "कोई भाषा नहीं मिली" },
+  "বাংলা": { search: "ভাষা খুঁজুন...", empty: "কোনো ভাষা পাওয়া যায়নি" },
+  "தமிழ்": { search: "மொழியைத் தேடுங்கள்...", empty: "மொழி எதுவும் இல்லை" },
+  "తెలుగు": { search: "భాషను వెతకండి...", empty: "భాషలు కనబడలేదు" },
+  "मराठी": { search: "भाषा शोधा...", empty: "कोणतीही भाषा सापडली नाही" },
+  "ગુજરાતી": { search: "ભાષા શોધો...", empty: "કોઈ ભાષા મળી નથી" },
+  "ಕನ್ನಡ": { search: "ಭಾಷೆ ಹುಡುಕಿ...", empty: "ಯಾವುದೇ ಭಾಷೆ ಸಿಗಲಿಲ್ಲ" },
+};
 
 type LanguageSelectorProps = {
   value: string;
@@ -11,6 +23,8 @@ type LanguageSelectorProps = {
 };
 
 export function LanguageSelector({ value, onChange, label, className }: LanguageSelectorProps) {
+  const { language } = useKiosk();
+  const txt = SEARCH_TEXT[language] ?? SEARCH_TEXT['English']!;
   const [open, setOpen] = useState(false);
   const [query, setQuery] = useState("");
   const containerRef = useRef<HTMLDivElement>(null);
@@ -64,14 +78,14 @@ export function LanguageSelector({ value, onChange, label, className }: Language
                 autoFocus
                 value={query}
                 onChange={(e) => setQuery(e.target.value)}
-                placeholder="Search language..."
+                placeholder={txt.search}
                 className="flex-1 border-none bg-transparent text-sm outline-none placeholder:text-zinc-400"
               />
             </div>
           </div>
           <div className="max-h-64 overflow-y-auto p-2">
             {filtered.length === 0 ? (
-              <p className="px-3 py-4 text-center text-sm text-zinc-400">No languages found</p>
+              <p className="px-3 py-4 text-center text-sm text-zinc-400">{txt.empty}</p>
             ) : (
               <div className="grid grid-cols-1 gap-1 sm:grid-cols-2">
                 {filtered.map((lang) => (
