@@ -36,7 +36,15 @@ export const Route = createFileRoute("/chat")({
 const KEYS = Object.keys(SOCRATES_LABELS) as SocratesKey[];
 
 const EMERGENCY_PHRASES: Record<string, string[]> = {
-  English: ["severe chest pain", "can't breathe", "cannot breathe", "sudden weakness", "fainted"],
+  English: [
+    "severe chest pain",
+    "unbearable chest pain",
+    "crushing chest pain",
+    "can't breathe",
+    "cannot breathe",
+    "sudden weakness",
+    "fainted",
+  ],
   हिंदी: [
     "तेज़ सीने में दर्द",
     "सीने में तेज दर्द",
