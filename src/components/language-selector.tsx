@@ -24,7 +24,7 @@ type LanguageSelectorProps = {
 
 export function LanguageSelector({ value, onChange, label, className }: LanguageSelectorProps) {
   const { language } = useKiosk();
-  const txt = SEARCH_TEXT[language] ?? SEARCH_TEXT.English;
+  const txt = SEARCH_TEXT[language] ?? SEARCH_TEXT['English']!;
   const [open, setOpen] = useState(false);
   const [query, setQuery] = useState("");
   const containerRef = useRef<HTMLDivElement>(null);
