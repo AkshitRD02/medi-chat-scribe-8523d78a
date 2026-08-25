@@ -14,13 +14,13 @@ export type Language = (typeof LANGUAGES)[number];
 
 export const LANGUAGE_ENGLISH_NAMES: Record<string, string> = {
   English: "English",
-  "हिंदी": "Hindi",
-  "বাংলা": "Bengali",
-  "தமிழ்": "Tamil",
-  "తెలుగు": "Telugu",
-  "मराठी": "Marathi",
-  "ગુજરાતી": "Gujarati",
-  "ಕನ್ನಡ": "Kannada",
+  हिंदी: "Hindi",
+  বাংলা: "Bengali",
+  தமிழ்: "Tamil",
+  తెలుగు: "Telugu",
+  मराठी: "Marathi",
+  ગુજરાતી: "Gujarati",
+  ಕನ್ನಡ: "Kannada",
 };
 
 export type Dict = {
@@ -42,12 +42,16 @@ export type Dict = {
   greeting: string;
   typing: string;
   extracted: string;
+  uploadDocument: string;
+  extractingDocument: string;
+  extractionComplete: string;
   inputPlaceholder: string;
   uploadLabel: string;
   sendLabel: string;
   markers: (n: number) => string;
   viewSummary: string;
   genericError: string;
+  priorityAlert: string;
 
   summaryTitle: string;
   patientId: string;
@@ -94,10 +98,14 @@ const en: Dict = {
   extracted: "extracted",
   inputPlaceholder: "Describe your symptoms...",
   uploadLabel: "Upload a medical document",
+  uploadDocument: "Upload prescription / lab report",
+  extractingDocument: "Extracting document…",
+  extractionComplete: "Document data extracted",
   sendLabel: "Send",
   markers: (n) => `${n} of 8 SOCRATES markers captured`,
   viewSummary: "View clinical summary",
   genericError: "Something went wrong. Please try again.",
+  priorityAlert: "⚠ Priority Alert — Staff Notified",
 
   summaryTitle: "Clinical Summary",
   patientId: "Patient ID",
@@ -154,10 +162,14 @@ const hi: Dict = {
   extracted: "से जानकारी निकाली गई",
   inputPlaceholder: "अपने लक्षण बताइए...",
   uploadLabel: "मेडिकल दस्तावेज़ अपलोड करें",
+  uploadDocument: "प्रिस्क्रिप्शन / लैब रिपोर्ट अपलोड करें",
+  extractingDocument: "दस्तावेज़ से जानकारी निकाली जा रही है…",
+  extractionComplete: "दस्तावेज़ से डेटा निकाला गया",
   sendLabel: "भेजें",
   markers: (n) => `8 में से ${n} SOCRATES बिंदु दर्ज`,
   viewSummary: "क्लिनिकल सारांश देखें",
   genericError: "कुछ गड़बड़ हो गई। कृपया पुनः प्रयास करें।",
+  priorityAlert: "⚠ प्राथमिकता अलर्ट — स्टाफ को सूचित किया गया",
 
   summaryTitle: "क्लिनिकल सारांश",
   patientId: "रोगी आईडी",
@@ -214,10 +226,14 @@ const bn: Dict = {
   extracted: "থেকে তথ্য সংগ্রহ করা হয়েছে",
   inputPlaceholder: "আপনার লক্ষণ বর্ণনা করুন...",
   uploadLabel: "একটি মেডিকেল নথি আপলোড করুন",
+  uploadDocument: "প্রেসক্রিপশন / ল্যাব রিপোর্ট আপলোড করুন",
+  extractingDocument: "নথি থেকে তথ্য সংগ্রহ করা হচ্ছে…",
+  extractionComplete: "নথি থেকে তথ্য সংগ্রহ সম্পন্ন",
   sendLabel: "পাঠান",
   markers: (n) => `8-এর মধ্যে ${n} SOCRATES চিহ্ন নথিভুক্ত`,
   viewSummary: "ক্লিনিকাল সারসংক্ষেপ দেখুন",
   genericError: "কিছু সমস্যা হয়েছে। আবার চেষ্টা করুন।",
+  priorityAlert: "⚠ জরুরি সতর্কতা — কর্মীদের জানানো হয়েছে",
 
   summaryTitle: "ক্লিনিকাল সারসংক্ষেপ",
   patientId: "রোগী আইডি",
@@ -274,10 +290,14 @@ const ta: Dict = {
   extracted: "இலிருந்து தரவு எடுக்கப்பட்டது",
   inputPlaceholder: "உங்கள் அறிகுறிகளை விவரிக்கவும்...",
   uploadLabel: "மருத்துவ ஆவணத்தை பதிவேற்றவும்",
+  uploadDocument: "மருத்துவச் சீட்டு / ஆய்வக அறிக்கையைப் பதிவேற்றவும்",
+  extractingDocument: "ஆவணத்திலிருந்து தகவல் எடுக்கப்படுகிறது…",
+  extractionComplete: "ஆவணத் தரவு எடுக்கப்பட்டது",
   sendLabel: "அனுப்பு",
   markers: (n) => `8-ல் ${n} SOCRATES குறிப்புகள் பதிவு`,
   viewSummary: "மருத்துவ சுருக்கத்தைப் பார்க்க",
   genericError: "ஏதோ தவறு நடந்தது. மீண்டும் முயற்சிக்கவும்.",
+  priorityAlert: "⚠ முன்னுரிமை எச்சரிக்கை — பணியாளர்களுக்குத் தெரிவிக்கப்பட்டது",
 
   summaryTitle: "மருத்துவ சுருக்கம்",
   patientId: "நோயாளி அடையாளம்",
@@ -334,10 +354,14 @@ const te: Dict = {
   extracted: "నుండి సమాచారం సేకరించబడింది",
   inputPlaceholder: "మీ లక్షణాలను వివరించండి...",
   uploadLabel: "వైద్య పత్రాన్ని అప్‌లోడ్ చేయండి",
+  uploadDocument: "ప్రిస్క్రిప్షన్ / ల్యాబ్ రిపోర్ట్‌ను అప్‌లోడ్ చేయండి",
+  extractingDocument: "పత్రం నుండి సమాచారం సేకరిస్తోంది…",
+  extractionComplete: "పత్రం నుండి డేటా సేకరించబడింది",
   sendLabel: "పంపండి",
   markers: (n) => `8లో ${n} SOCRATES గుర్తులు నమోదు`,
   viewSummary: "క్లినికల్ సారాంశాన్ని చూడండి",
   genericError: "ఏదో తప్పు జరిగింది. దయచేసి మళ్లీ ప్రయత్నించండి.",
+  priorityAlert: "⚠ ప్రాధాన్యత హెచ్చరిక — సిబ్బందికి సమాచారం అందింది",
 
   summaryTitle: "క్లినికల్ సారాంశం",
   patientId: "రోగి ఐడి",
@@ -394,10 +418,14 @@ const mr: Dict = {
   extracted: "मधून माहिती काढली",
   inputPlaceholder: "आपली लक्षणे सांगा...",
   uploadLabel: "वैद्यकीय कागदपत्र अपलोड करा",
+  uploadDocument: "प्रिस्क्रिप्शन / लॅब रिपोर्ट अपलोड करा",
+  extractingDocument: "कागदपत्रातून माहिती काढली जात आहे…",
+  extractionComplete: "कागदपत्रातील माहिती काढली",
   sendLabel: "पाठवा",
   markers: (n) => `8 पैकी ${n} SOCRATES नोंदी`,
   viewSummary: "क्लिनिकल सारांश पहा",
   genericError: "काहीतरी चूक झाली. कृपया पुन्हा प्रयत्न करा.",
+  priorityAlert: "⚠ प्राधान्य सूचना — कर्मचाऱ्यांना कळवले आहे",
 
   summaryTitle: "क्लिनिकल सारांश",
   patientId: "रुग्ण आयडी",
@@ -454,10 +482,14 @@ const gu: Dict = {
   extracted: "માંથી માહિતી કાઢવામાં આવી",
   inputPlaceholder: "તમારા લક્ષણોનું વર્ણન કરો...",
   uploadLabel: "મેડિકલ દસ્તાવેજ અપલોડ કરો",
+  uploadDocument: "પ્રિસ્ક્રિપ્શન / લેબ રિપોર્ટ અપલોડ કરો",
+  extractingDocument: "દસ્તાવેજમાંથી માહિતી કાઢવામાં આવી રહી છે…",
+  extractionComplete: "દસ્તાવેજમાંથી ડેટા કાઢવામાં આવ્યો",
   sendLabel: "મોકલો",
   markers: (n) => `8 માંથી ${n} SOCRATES નિશાનીઓ નોંધાયેલ`,
   viewSummary: "ક્લિનિકલ સારાંશ જુઓ",
   genericError: "કંઈક ખોટું થયું. કૃપા કરીને ફરી પ્રયાસ કરો.",
+  priorityAlert: "⚠ પ્રાથમિકતા ચેતવણી — સ્ટાફને જાણ કરવામાં આવી",
 
   summaryTitle: "ક્લિનિકલ સારાંશ",
   patientId: "દર્દી આઈડી",
@@ -514,10 +546,14 @@ const kn: Dict = {
   extracted: "ಇಂದ ಮಾಹಿತಿ ಸಂಗ್ರಹಿಸಲಾಗಿದೆ",
   inputPlaceholder: "ನಿಮ್ಮ ಲಕ್ಷಣಗಳನ್ನು ವಿವರಿಸಿ...",
   uploadLabel: "ವೈದ್ಯಕೀಯ ದಾಖಲೆಯನ್ನು ಅಪ್‌ಲೋಡ್ ಮಾಡಿ",
+  uploadDocument: "ಪ್ರಿಸ್ಕ್ರಿಪ್ಷನ್ / ಲ್ಯಾಬ್ ವರದಿ ಅಪ್‌ಲೋಡ್ ಮಾಡಿ",
+  extractingDocument: "ದಾಖಲೆಯಿಂದ ಮಾಹಿತಿ ಪಡೆಯಲಾಗುತ್ತಿದೆ…",
+  extractionComplete: "ದಾಖಲೆಯಿಂದ ಮಾಹಿತಿ ಪಡೆಯಲಾಗಿದೆ",
   sendLabel: "ಕಳುಹಿಸಿ",
   markers: (n) => `8ರಲ್ಲಿ ${n} SOCRATES ಗುರುತುಗಳು ದಾಖಲಾಗಿವೆ`,
   viewSummary: "ಕ್ಲಿನಿಕಲ್ ಸಾರಾಂಶ ನೋಡಿ",
   genericError: "ಏನೋ ತಪ್ಪಾಗಿದೆ. ದಯವಿಟ್ಟು ಮತ್ತೆ ಪ್ರಯತ್ನಿಸಿ.",
+  priorityAlert: "⚠ ಆದ್ಯತೆಯ ಎಚ್ಚರಿಕೆ — ಸಿಬ್ಬಂದಿಗೆ ತಿಳಿಸಲಾಗಿದೆ",
 
   summaryTitle: "ಕ್ಲಿನಿಕಲ್ ಸಾರಾಂಶ",
   patientId: "ರೋಗಿ ಐಡಿ",
@@ -552,13 +588,13 @@ const kn: Dict = {
 
 export const DICTS: Record<string, Dict> = {
   English: en,
-  "हिंदी": hi,
-  "বাংলা": bn,
-  "தமிழ்": ta,
-  "తెలుగు": te,
-  "मराठी": mr,
-  "ગુજરાતી": gu,
-  "ಕನ್ನಡ": kn,
+  हिंदी: hi,
+  বাংলা: bn,
+  தமிழ்: ta,
+  తెలుగు: te,
+  मराठी: mr,
+  ગુજરાતી: gu,
+  ಕನ್ನಡ: kn,
 };
 
 export function getDict(language: string): Dict {

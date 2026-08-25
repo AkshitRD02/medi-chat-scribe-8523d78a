@@ -51,6 +51,7 @@ export type KioskState = {
   extracted: ExtractedDoc | null;
   summary: Summary | null;
   confirmed: boolean;
+  priorityAlert: boolean;
 };
 
 const STORAGE_KEY = "medikiosk-session";
@@ -64,6 +65,7 @@ export const initialState: KioskState = {
   extracted: null,
   summary: null,
   confirmed: false,
+  priorityAlert: false,
 };
 
 export function nowLabel() {
@@ -88,7 +90,9 @@ function read(): KioskState {
   return state;
 }
 
-export function setKioskState(patch: Partial<KioskState> | ((s: KioskState) => Partial<KioskState>)) {
+export function setKioskState(
+  patch: Partial<KioskState> | ((s: KioskState) => Partial<KioskState>),
+) {
   const current = read();
   const next = { ...current, ...(typeof patch === "function" ? patch(current) : patch) };
   state = next;
@@ -135,11 +139,10 @@ export function effectiveMessages(state: KioskState): ChatMessage[] {
 }
 
 export const MOCK_EXTRACTION: ExtractedDoc = {
-  fileName: "Lab_Report_Jan2024.pdf",
+  fileName: "Prescription_March2026.pdf",
   fields: [
-    { label: "Hemoglobin", value: "14.2 g/dL" },
-    { label: "HbA1c", value: "6.4%" },
-    { label: "Creatinine", value: "0.9 mg/dL" },
-    { label: "Status", value: "Within normal range" },
+    { label: "Diagnosis", value: "Hypertension" },
+    { label: "Medication", value: "Amlodipine 5mg" },
+    { label: "Last visit", value: "March 2026" },
   ],
 };
