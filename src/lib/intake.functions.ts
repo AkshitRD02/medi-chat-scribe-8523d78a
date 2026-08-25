@@ -11,8 +11,11 @@ const InputSchema = z.object({
   ),
   language: z.string().default("English"),
   extractedNote: z.string().nullable().default(null),
+  ayushMode: z.boolean().default(false),
 });
 
 export const intakeTurn = createServerFn({ method: "POST" })
   .inputValidator((input: unknown) => InputSchema.parse(input))
-  .handler(async ({ data }) => runIntakeTurn(data.history, data.language, data.extractedNote));
+  .handler(async ({ data }) =>
+    runIntakeTurn(data.history, data.language, data.extractedNote, data.ayushMode),
+  );

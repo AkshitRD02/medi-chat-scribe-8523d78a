@@ -40,6 +40,7 @@ export type Summary = {
   hpi: string;
   pastMedicalHistory: string[];
   socratesTags: string[];
+  ayushResponses: string[];
 };
 
 export type KioskState = {
@@ -52,6 +53,7 @@ export type KioskState = {
   summary: Summary | null;
   confirmed: boolean;
   priorityAlert: boolean;
+  ayushMode: boolean;
 };
 
 const STORAGE_KEY = "medikiosk-session";
@@ -66,6 +68,7 @@ export const initialState: KioskState = {
   summary: null,
   confirmed: false,
   priorityAlert: false,
+  ayushMode: false,
 };
 
 export function nowLabel() {

@@ -25,7 +25,7 @@ export const Route = createFileRoute("/")({
 });
 
 function WelcomeScreen() {
-  const { language, consented } = useKiosk();
+  const { language, consented, ayushMode } = useKiosk();
   const t = useT();
   const [scanning, setScanning] = useState(false);
   const [scanned, setScanned] = useState<string | null>(null);
@@ -76,7 +76,23 @@ function WelcomeScreen() {
                 onChange={(e) => setKioskState({ consented: e.target.checked })}
                 className="mt-0.5 size-5 shrink-0 accent-clinical-teal"
               />
-              <span className="text-sm leading-relaxed text-zinc-600">{t.consent}</span>
+              <span className="text-base leading-relaxed text-zinc-600">{t.consent}</span>
+            </label>
+
+            <label className="flex min-h-14 cursor-pointer items-center justify-between gap-4 rounded-xl bg-clinical-teal/5 p-4 ring-1 ring-clinical-teal/10">
+              <span className="text-base font-medium leading-relaxed text-zinc-800">
+                {t.ayushMode}
+                <span className="mt-1 block text-sm font-normal text-zinc-600">
+                  {t.ayushDescription}
+                </span>
+              </span>
+              <input
+                type="checkbox"
+                role="switch"
+                checked={ayushMode}
+                onChange={(e) => setKioskState({ ayushMode: e.target.checked })}
+                className="size-6 shrink-0 accent-clinical-teal"
+              />
             </label>
 
             <button
@@ -94,13 +110,9 @@ function WelcomeScreen() {
                 )}
               </span>
               <span className="text-lg font-medium text-zinc-900">
-                {scanned
-                  ? `${t.verified} · ${scanned}`
-                  : scanning
-                    ? t.scanning
-                    : t.scanTitle}
+                {scanned ? `${t.verified} · ${scanned}` : scanning ? t.scanning : t.scanTitle}
               </span>
-              <span className="text-sm text-zinc-500">
+              <span className="text-base text-zinc-500">
                 {consented ? t.scanHelpConsented : t.scanHelpNoConsent}
               </span>
             </button>
@@ -115,11 +127,16 @@ function WelcomeScreen() {
               onClick={() => {
                 if (!consented) return;
                 resetKiosk();
-                setKioskState({ language, consented: true, abhaId: "Manual entry" });
+                setKioskState({
+                  language,
+                  consented: true,
+                  ayushMode,
+                  abhaId: "Manual entry",
+                });
                 navigate({ to: "/chat" });
               }}
               disabled={!consented}
-              className="min-h-14 w-full rounded-xl py-4 font-medium text-clinical-teal transition-colors hover:bg-clinical-teal/5 disabled:opacity-50"
+              className="min-h-14 w-full rounded-xl py-4 text-base font-medium text-clinical-teal transition-colors hover:bg-clinical-teal/5 disabled:opacity-50"
             >
               {t.manualEntry}
             </button>

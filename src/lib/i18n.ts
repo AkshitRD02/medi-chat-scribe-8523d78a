@@ -36,6 +36,8 @@ export type Dict = {
   scanHelpNoConsent: string;
   or: string;
   manualEntry: string;
+  ayushMode: string;
+  ayushDescription: string;
 
   assistantName: string;
   assistantSubtitle: string;
@@ -69,6 +71,13 @@ export type Dict = {
   defer: string;
   confirm: string;
   confirmed: string;
+  confirmPush: string;
+  hisSuccess: string;
+  ayushSection: string;
+  prakriti: string;
+  agni: string;
+  aharaVihara: string;
+  ayushPending: string;
   awaitingComplaint: string;
   awaitingHpi: string;
   socrates: Record<SocratesKey, string>;
@@ -89,6 +98,8 @@ const en: Dict = {
   scanHelpNoConsent: "Please accept the consent above to continue",
   or: "or",
   manualEntry: "Enter ABHA Number Manually",
+  ayushMode: "Ayurvedic (AYUSH) consultation mode",
+  ayushDescription: "Adds questions about constitution, digestion, and lifestyle.",
 
   assistantName: "Clinical Intake Assistant",
   assistantSubtitle: "Powered by SOCRATES framework",
@@ -123,6 +134,13 @@ const en: Dict = {
   defer: "Defer",
   confirm: "Confirm Entry",
   confirmed: "Entry Confirmed",
+  confirmPush: "Confirm & Push to HIS",
+  hisSuccess: "History pushed to Hospital HIS and linked to ABHA record.",
+  ayushSection: "AYUSH Consultation Details",
+  prakriti: "Prakriti (body constitution)",
+  agni: "Agni (digestive strength)",
+  aharaVihara: "Ahara-Vihara (diet and lifestyle)",
+  ayushPending: "AYUSH questions will appear here after the standard interview.",
   awaitingComplaint: "Awaiting completion of the symptom interview.",
   awaitingHpi:
     "The patient interview is still in progress. Return to the intake chat so the assistant can complete the SOCRATES assessment.",
@@ -153,6 +171,8 @@ const hi: Dict = {
   scanHelpNoConsent: "जारी रखने के लिए कृपया ऊपर सहमति स्वीकार करें",
   or: "अथवा",
   manualEntry: "ABHA नंबर मैन्युअल रूप से दर्ज करें",
+  ayushMode: "आयुर्वेदिक (AYUSH) परामर्श मोड",
+  ayushDescription: "शरीर की प्रकृति, पाचन और जीवनशैली से जुड़े प्रश्न जोड़े जाएंगे।",
 
   assistantName: "क्लिनिकल इनटेक सहायक",
   assistantSubtitle: "SOCRATES ढांचे पर आधारित",
@@ -187,6 +207,13 @@ const hi: Dict = {
   defer: "स्थगित करें",
   confirm: "प्रविष्टि पुष्टि करें",
   confirmed: "प्रविष्टि पुष्ट",
+  confirmPush: "पुष्टि करें और HIS में भेजें",
+  hisSuccess: "इतिहास Hospital HIS में भेजकर ABHA रिकॉर्ड से जोड़ दिया गया।",
+  ayushSection: "AYUSH परामर्श विवरण",
+  prakriti: "प्रकृति (शरीर का गठन)",
+  agni: "अग्नि (पाचन शक्ति)",
+  aharaVihara: "आहार-विहार (आहार और जीवनशैली)",
+  ayushPending: "मानक साक्षात्कार के बाद AYUSH प्रश्नों के उत्तर यहां दिखाई देंगे।",
   awaitingComplaint: "लक्षण साक्षात्कार पूरा होने की प्रतीक्षा है।",
   awaitingHpi:
     "रोगी का साक्षात्कार अभी जारी है। कृपया चैट पर लौटें ताकि सहायक SOCRATES मूल्यांकन पूरा कर सके।",
@@ -217,6 +244,8 @@ const bn: Dict = {
   scanHelpNoConsent: "চালিয়ে যেতে উপরের সম্মতি গ্রহণ করুন",
   or: "অথবা",
   manualEntry: "ABHA নম্বর নিজে লিখুন",
+  ayushMode: "আয়ুর্বেদিক (AYUSH) পরামর্শ মোড",
+  ayushDescription: "শরীরের গঠন, হজম এবং জীবনযাপন সম্পর্কে অতিরিক্ত প্রশ্ন করা হবে।",
 
   assistantName: "ক্লিনিকাল ইনটেক সহকারী",
   assistantSubtitle: "SOCRATES কাঠামোর উপর ভিত্তি করে",
@@ -251,6 +280,13 @@ const bn: Dict = {
   defer: "স্থগিত করুন",
   confirm: "নথিভুক্তি নিশ্চিত করুন",
   confirmed: "নথিভুক্তি নিশ্চিত",
+  confirmPush: "নিশ্চিত করুন ও HIS-এ পাঠান",
+  hisSuccess: "ইতিহাস Hospital HIS-এ পাঠানো হয়েছে এবং ABHA রেকর্ডের সঙ্গে যুক্ত হয়েছে।",
+  ayushSection: "AYUSH পরামর্শের বিবরণ",
+  prakriti: "প্রকৃতি (শরীরের গঠন)",
+  agni: "অগ্নি (হজমের শক্তি)",
+  aharaVihara: "আহার-বিহার (খাদ্য ও জীবনযাপন)",
+  ayushPending: "সাধারণ সাক্ষাৎকারের পরে AYUSH প্রশ্নের উত্তর এখানে দেখা যাবে।",
   awaitingComplaint: "লক্ষণ সাক্ষাৎকার সম্পন্ন হওয়ার অপেক্ষায়।",
   awaitingHpi:
     "রোগীর সাক্ষাৎকার এখনও চলছে। সহকারী SOCRATES মূল্যায়ন সম্পন্ন করতে পারে তার জন্য চ্যাটে ফিরে যান।",
@@ -281,6 +317,9 @@ const ta: Dict = {
   scanHelpNoConsent: "தொடர மேலே உள்ள ஒப்புதலை ஏற்கவும்",
   or: "அல்லது",
   manualEntry: "ABHA எண்ணை கைமுறையாக உள்ளிடவும்",
+  ayushMode: "ஆயுர்வேத (AYUSH) ஆலோசனை முறை",
+  ayushDescription:
+    "உடல் அமைப்பு, செரிமானம் மற்றும் வாழ்க்கை முறை குறித்து கூடுதல் கேள்விகள் கேட்கப்படும்.",
 
   assistantName: "மருத்துவ பதிவு உதவியாளர்",
   assistantSubtitle: "SOCRATES கட்டமைப்பின் அடிப்படையில்",
@@ -315,6 +354,13 @@ const ta: Dict = {
   defer: "ஒத்திவை",
   confirm: "பதிவை உறுதிப்படுத்து",
   confirmed: "பதிவு உறுதி செய்யப்பட்டது",
+  confirmPush: "உறுதிசெய்து HIS-க்கு அனுப்பவும்",
+  hisSuccess: "வரலாறு Hospital HIS-க்கு அனுப்பப்பட்டு ABHA பதிவுடன் இணைக்கப்பட்டது.",
+  ayushSection: "AYUSH ஆலோசனை விவரங்கள்",
+  prakriti: "பிரகிருதி (உடல் அமைப்பு)",
+  agni: "அக்னி (செரிமான வலிமை)",
+  aharaVihara: "ஆஹார-விஹார (உணவு மற்றும் வாழ்க்கை முறை)",
+  ayushPending: "வழக்கமான நேர்காணலுக்குப் பிறகு AYUSH கேள்விகளுக்கான பதில்கள் இங்கே தோன்றும்.",
   awaitingComplaint: "அறிகுறி நேர்காணல் முடிவடையக் காத்திருக்கிறது.",
   awaitingHpi:
     "நோயாளியின் நேர்காணல் தொடர்கிறது. உதவியாளர் SOCRATES மதிப்பீட்டை முடிக்க அரட்டைக்குத் திரும்பவும்.",
@@ -345,6 +391,8 @@ const te: Dict = {
   scanHelpNoConsent: "కొనసాగడానికి దయచేసి పైన ఉన్న అంగీకారాన్ని అంగీకరించండి",
   or: "లేదా",
   manualEntry: "ABHA నంబర్‌ను మాన్యువల్‌గా నమోదు చేయండి",
+  ayushMode: "ఆయుర్వేద (AYUSH) సంప్రదింపు మోడ్",
+  ayushDescription: "శరీర స్వభావం, జీర్ణశక్తి మరియు జీవనశైలి గురించి అదనపు ప్రశ్నలు అడుగుతారు.",
 
   assistantName: "క్లినికల్ ఇన్‌టేక్ సహాయకుడు",
   assistantSubtitle: "SOCRATES ఫ్రేమ్‌వర్క్ ఆధారంగా",
@@ -379,6 +427,13 @@ const te: Dict = {
   defer: "వాయిదా వేయండి",
   confirm: "నమోదును నిర్ధారించండి",
   confirmed: "నమోదు నిర్ధారించబడింది",
+  confirmPush: "నిర్ధారించి HISకు పంపండి",
+  hisSuccess: "చరిత్ర Hospital HISకు పంపబడింది మరియు ABHA రికార్డుతో లింక్ చేయబడింది.",
+  ayushSection: "AYUSH సంప్రదింపు వివరాలు",
+  prakriti: "ప్రకృతి (శరీర స్వభావం)",
+  agni: "అగ్ని (జీర్ణశక్తి)",
+  aharaVihara: "ఆహార-విహార (ఆహారం మరియు జీవనశైలి)",
+  ayushPending: "సాధారణ ఇంటర్వ్యూ తర్వాత AYUSH ప్రశ్నల సమాధానాలు ఇక్కడ కనిపిస్తాయి.",
   awaitingComplaint: "లక్షణ ఇంటర్వ్యూ పూర్తి కావడానికి వేచి ఉంది.",
   awaitingHpi:
     "రోగి ఇంటర్వ్యూ ఇంకా కొనసాగుతోంది. సహాయకుడు SOCRATES మూల్యాంకనం పూర్తి చేయడానికి చాట్‌కు తిరిగి వెళ్ళండి.",
@@ -409,6 +464,8 @@ const mr: Dict = {
   scanHelpNoConsent: "पुढे जाण्यासाठी कृपया वरील संमती स्वीकारा",
   or: "किंवा",
   manualEntry: "ABHA क्रमांक स्वतः प्रविष्ट करा",
+  ayushMode: "आयुर्वेदिक (AYUSH) सल्ला मोड",
+  ayushDescription: "शरीरप्रकृती, पचनशक्ती आणि जीवनशैलीबद्दल अतिरिक्त प्रश्न विचारले जातील.",
 
   assistantName: "क्लिनिकल इनटेक सहाय्यक",
   assistantSubtitle: "SOCRATES चौकटीवर आधारित",
@@ -443,6 +500,13 @@ const mr: Dict = {
   defer: "पुढे ढकला",
   confirm: "नोंद निश्चित करा",
   confirmed: "नोंद निश्चित झाली",
+  confirmPush: "पुष्टी करा आणि HIS वर पाठवा",
+  hisSuccess: "इतिहास Hospital HIS वर पाठवून ABHA नोंदीशी जोडला आहे.",
+  ayushSection: "AYUSH सल्ला तपशील",
+  prakriti: "प्रकृती (शरीराची ठेवण)",
+  agni: "अग्नी (पचनशक्ती)",
+  aharaVihara: "आहार-विहार (आहार आणि जीवनशैली)",
+  ayushPending: "नियमित मुलाखतीनंतर AYUSH प्रश्नांची उत्तरे येथे दिसतील.",
   awaitingComplaint: "लक्षण मुलाखत पूर्ण होण्याची प्रतीक्षा आहे.",
   awaitingHpi:
     "रुग्णाची मुलाखत सुरू आहे. सहाय्यक SOCRATES मूल्यांकन पूर्ण करू शकेल यासाठी चॅटवर परत जा.",
@@ -473,6 +537,8 @@ const gu: Dict = {
   scanHelpNoConsent: "આગળ વધવા માટે ઉપરની સંમતિ સ્વીકારો",
   or: "અથવા",
   manualEntry: "ABHA નંબર જાતે દાખલ કરો",
+  ayushMode: "આયુર્વેદિક (AYUSH) સલાહ મોડ",
+  ayushDescription: "શરીરની પ્રકૃતિ, પાચનશક્તિ અને જીવનશૈલી વિશે વધારાના પ્રશ્નો પૂછાશે.",
 
   assistantName: "ક્લિનિકલ ઈનટેક સહાયક",
   assistantSubtitle: "SOCRATES માળખા પર આધારિત",
@@ -507,6 +573,13 @@ const gu: Dict = {
   defer: "મુલતવી મૂકો",
   confirm: "નોંધ ખાતરી કરો",
   confirmed: "નોંદ ખાતરી થયેલ",
+  confirmPush: "ખાતરી કરો અને HIS પર મોકલો",
+  hisSuccess: "ઇતિહાસ Hospital HIS પર મોકલવામાં આવ્યો અને ABHA રેકોર્ડ સાથે જોડાયો.",
+  ayushSection: "AYUSH સલાહની વિગતો",
+  prakriti: "પ્રકૃતિ (શરીરની રચના)",
+  agni: "અગ્નિ (પાચન શક્તિ)",
+  aharaVihara: "આહાર-વિહાર (આહાર અને જીવનશૈલી)",
+  ayushPending: "નિયમિત મુલાકાત પછી AYUSH પ્રશ્નોના જવાબો અહીં દેખાશે.",
   awaitingComplaint: "લક્ષણ મુલાકાત પૂર્ણ થવાની રાહ જોવાઈ રહી છે.",
   awaitingHpi:
     "દર્દીની મુલાકાત હજુ ચાલુ છે. સહાયક SOCRATES મૂલ્યાંકન પૂર્ણ કરી શકે તે માટે ચેટ પર પાછા જાઓ.",
@@ -537,6 +610,9 @@ const kn: Dict = {
   scanHelpNoConsent: "ಮುಂದುವರಿಯಲು ದಯವಿಟ್ಟು ಮೇಲಿನ ಒಪ್ಪಿಗೆಯನ್ನು ಸ್ವೀಕರಿಸಿ",
   or: "ಅಥವಾ",
   manualEntry: "ABHA ಸಂಖ್ಯೆಯನ್ನು ಹಸ್ತಚಾಲಿತವಾಗಿ ನಮೂದಿಸಿ",
+  ayushMode: "ಆಯುರ್ವೇದ (AYUSH) ಸಮಾಲೋಚನೆ ಮೋಡ್",
+  ayushDescription:
+    "ದೇಹದ ರಚನೆ, ಜೀರ್ಣಶಕ್ತಿ ಮತ್ತು ಜೀವನಶೈಲಿಯ ಕುರಿತು ಹೆಚ್ಚುವರಿ ಪ್ರಶ್ನೆಗಳನ್ನು ಕೇಳಲಾಗುತ್ತದೆ.",
 
   assistantName: "ಕ್ಲಿನಿಕಲ್ ಇನ್‌ಟೇಕ್ ಸಹಾಯಕ",
   assistantSubtitle: "SOCRATES ಚೌಕಟ್ಟಿನ ಆಧಾರದ ಮೇಲೆ",
@@ -571,6 +647,13 @@ const kn: Dict = {
   defer: "ಮುಂದೂಡಿ",
   confirm: "ದಾಖಲೆ ಖಚಿತಗೊಳಿಸಿ",
   confirmed: "ದಾಖಲೆ ಖಚಿತಗೊಂಡಿದೆ",
+  confirmPush: "ಖಚಿತಪಡಿಸಿ ಮತ್ತು HIS ಗೆ ಕಳುಹಿಸಿ",
+  hisSuccess: "ಇತಿಹಾಸವನ್ನು Hospital HIS ಗೆ ಕಳುಹಿಸಿ ABHA ದಾಖಲೆಯೊಂದಿಗೆ ಲಿಂಕ್ ಮಾಡಲಾಗಿದೆ.",
+  ayushSection: "AYUSH ಸಮಾಲೋಚನೆ ವಿವರಗಳು",
+  prakriti: "ಪ್ರಕೃತಿ (ದೇಹದ ರಚನೆ)",
+  agni: "ಅಗ್ನಿ (ಜೀರ್ಣಶಕ್ತಿ)",
+  aharaVihara: "ಆಹಾರ-ವಿಹಾರ (ಆಹಾರ ಮತ್ತು ಜೀವನಶೈಲಿ)",
+  ayushPending: "ಸಾಮಾನ್ಯ ಸಂದರ್ಶನದ ನಂತರ AYUSH ಪ್ರಶ್ನೆಗಳ ಉತ್ತರಗಳು ಇಲ್ಲಿ ಕಾಣಿಸುತ್ತವೆ.",
   awaitingComplaint: "ಲಕ್ಷಣ ಸಂದರ್ಶನ ಪೂರ್ಣಗೊಳ್ಳಲು ಕಾಯುತ್ತಿದೆ.",
   awaitingHpi:
     "ರೋಗಿಯ ಸಂದರ್ಶನ ಇನ್ನೂ ನಡೆಯುತ್ತಿದೆ. ಸಹಾಯಕ SOCRATES ಮೌಲ್ಯಮಾಪನ ಪೂರ್ಣಗೊಳಿಸಲು ಚಾಟ್‌ಗೆ ಹಿಂತಿರುಗಿ.",

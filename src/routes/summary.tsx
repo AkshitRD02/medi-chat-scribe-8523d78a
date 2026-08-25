@@ -28,16 +28,27 @@ function SummaryScreen() {
   const t = useT();
   const navigate = useNavigate();
   const [editing, setEditing] = useState(false);
+  const [success, setSuccess] = useState(false);
 
   const summary = state.summary ?? {
     chiefComplaint: t.awaitingComplaint,
     hpi: t.awaitingHpi,
     pastMedicalHistory: [],
     socratesTags: [],
+    ayushResponses: [],
   };
+  const ayushResponses = summary.ayushResponses ?? [];
 
   const update = (patch: Partial<typeof summary>) =>
     setKioskState({ summary: { ...summary, ...patch } });
+
+  const updateDocumentField = (index: number, value: string) => {
+    if (!state.extracted) return;
+    const fields = state.extracted.fields.map((field, fieldIndex) =>
+      fieldIndex === index ? { ...field, value } : field,
+    );
+    setKioskState({ extracted: { ...state.extracted, fields } });
+  };
 
   return (
     <main className="min-h-screen bg-zinc-50 px-6 py-12 md:py-24">
@@ -72,6 +83,42 @@ function SummaryScreen() {
                 </p>
               )}
             </section>
+
+            {(state.ayushMode || ayushResponses.length > 0) && (
+              <section className="bg-clinical-teal/5 p-6">
+                <h2 className="mb-3 text-sm font-semibold uppercase tracking-widest text-clinical-teal">
+                  {t.ayushSection}
+                </h2>
+                {ayushResponses.length ? (
+                  <dl className="space-y-3 text-base">
+                    {ayushResponses.map((response, index) => (
+                      <div key={`${response}-${index}`} className="flex flex-col gap-1">
+                        <dt className="text-sm font-semibold text-zinc-600">
+                          {[t.prakriti, t.agni, t.aharaVihara][index] ?? t.ayushSection}
+                        </dt>
+                        <dd className="text-zinc-900">
+                          {editing ? (
+                            <textarea
+                              value={response}
+                              onChange={(e) => {
+                                const updatedResponses = [...ayushResponses];
+                                updatedResponses[index] = e.target.value;
+                                update({ ayushResponses: updatedResponses });
+                              }}
+                              className="min-h-20 w-full rounded-lg bg-white p-3 text-base text-zinc-900 outline-none ring-1 ring-zinc-950/10 focus:ring-clinical-teal"
+                            />
+                          ) : (
+                            response
+                          )}
+                        </dd>
+                      </div>
+                    ))}
+                  </dl>
+                ) : (
+                  <p className="text-base text-zinc-600">{t.ayushPending}</p>
+                )}
+              </section>
+            )}
 
             <section className="p-6">
               <h2 className="mb-3 text-xs font-medium uppercase tracking-widest text-zinc-400">
@@ -134,10 +181,18 @@ function SummaryScreen() {
               </h2>
               {state.extracted ? (
                 <div className="space-y-2">
-                  {state.extracted.fields.map((f) => (
-                    <div key={f.label} className="flex items-center justify-between text-xs">
+                  {state.extracted.fields.map((f, index) => (
+                    <div key={f.label} className="flex items-center justify-between gap-4 text-sm">
                       <span className="font-medium text-zinc-500">{f.label}</span>
-                      <span className="text-zinc-900">{f.value}</span>
+                      {editing ? (
+                        <input
+                          value={f.value}
+                          onChange={(e) => updateDocumentField(index, e.target.value)}
+                          className="min-h-11 w-2/3 rounded-lg bg-white px-3 text-right text-sm text-zinc-900 outline-none ring-1 ring-zinc-950/10 focus:ring-clinical-teal"
+                        />
+                      ) : (
+                        <span className="text-right text-zinc-900">{f.value}</span>
+                      )}
                     </div>
                   ))}
                 </div>
@@ -150,7 +205,7 @@ function SummaryScreen() {
           <div className="flex items-center justify-between border-t border-zinc-950/5 bg-zinc-50/30 p-6">
             <button
               onClick={() => setEditing((v) => !v)}
-              className="flex min-h-11 items-center gap-2 text-sm font-medium text-zinc-500 transition-colors hover:text-zinc-900"
+              className="flex min-h-12 items-center gap-2 text-base font-medium text-zinc-500 transition-colors hover:text-zinc-900"
             >
               <Pencil className="size-4" strokeWidth={1.5} />
               {editing ? t.doneEditing : t.edit}
@@ -158,20 +213,32 @@ function SummaryScreen() {
             <div className="flex items-center gap-3">
               <button
                 onClick={() => navigate({ to: "/chat" })}
-                className="flex min-h-11 items-center gap-2 rounded-lg bg-white py-2 pl-2 pr-3 text-sm font-medium text-zinc-900 ring-1 ring-zinc-950/5"
+                className="flex min-h-12 items-center gap-2 rounded-lg bg-white py-2 pl-2 pr-3 text-base font-medium text-zinc-900 ring-1 ring-zinc-950/5"
               >
                 <CalendarDays className="size-4 shrink-0" strokeWidth={1.5} />
                 {t.defer}
               </button>
               <button
-                onClick={() => setKioskState({ confirmed: true })}
-                className="flex min-h-11 items-center gap-2 rounded-lg bg-clinical-teal py-2 pl-2 pr-3 text-sm font-medium text-primary-foreground shadow-sm ring-1 ring-clinical-teal"
+                onClick={() => {
+                  setKioskState({ confirmed: true });
+                  setSuccess(true);
+                  window.setTimeout(() => setSuccess(false), 3200);
+                }}
+                className="flex min-h-12 items-center gap-2 rounded-lg bg-clinical-teal py-2 pl-2 pr-3 text-base font-medium text-primary-foreground shadow-sm ring-1 ring-clinical-teal"
               >
                 <Check className="size-4 shrink-0" strokeWidth={1.5} />
-                {state.confirmed ? t.confirmed : t.confirm}
+                {state.confirmed ? t.confirmed : t.confirmPush}
               </button>
             </div>
           </div>
+          {success && (
+            <div
+              role="status"
+              className="border-t border-clinical-teal/20 bg-clinical-teal/10 px-6 py-4 text-base font-medium text-clinical-teal"
+            >
+              {t.hisSuccess}
+            </div>
+          )}
         </div>
       </div>
     </main>

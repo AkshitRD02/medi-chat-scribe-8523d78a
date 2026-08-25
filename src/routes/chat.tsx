@@ -114,6 +114,7 @@ function ChatScreen() {
         data: {
           history: history.map((m) => ({ role: m.role, content: m.content })),
           language: state.language,
+          ayushMode: state.ayushMode,
           extractedNote: state.extracted
             ? `${state.extracted.fileName}: ${state.extracted.fields
                 .map((f) => `${f.label} ${f.value}`)
@@ -129,7 +130,12 @@ function ChatScreen() {
             ...result.captured.filter((c): c is SocratesKey => c in SOCRATES_LABELS),
           ]),
         ),
-        summary: result.summary ?? s.summary,
+        summary: result.summary
+          ? {
+              ...result.summary,
+              ayushResponses: result.summary.ayushResponses ?? s.summary?.ayushResponses ?? [],
+            }
+          : s.summary,
       }));
     } catch (e) {
       setError(e instanceof Error ? e.message : t.genericError);
@@ -181,7 +187,9 @@ function ChatScreen() {
               m.role === "assistant" ? (
                 <div key={i} className="flex max-w-[80%] flex-col gap-2">
                   <div className="rounded-2xl rounded-tl-none bg-zinc-100 p-4">
-                    <p className="text-pretty text-sm leading-relaxed text-zinc-800">{m.content}</p>
+                    <p className="text-pretty text-base leading-relaxed text-zinc-800">
+                      {m.content}
+                    </p>
                   </div>
                   <span className="px-1 text-[10px] font-medium uppercase text-zinc-400">
                     AI{m.time ? ` • ${m.time}` : ""}
@@ -264,7 +272,7 @@ function ChatScreen() {
                 }}
                 type="text"
                 placeholder={t.inputPlaceholder}
-                className="min-h-11 flex-1 border-none bg-transparent px-1 py-2 text-sm outline-none placeholder:text-zinc-400"
+                className="min-h-11 flex-1 border-none bg-transparent px-1 py-2 text-base outline-none placeholder:text-zinc-400"
               />
               <button
                 onClick={() => void submit()}
@@ -292,7 +300,7 @@ function ChatScreen() {
           <p className="text-xs text-zinc-500">{t.markers(capturedCount)}</p>
           <button
             onClick={() => navigate({ to: "/summary" })}
-            className="flex min-h-11 items-center gap-2 rounded-lg bg-white px-4 text-sm font-medium text-zinc-900 shadow-sm ring-1 ring-zinc-950/5"
+            className="flex min-h-12 items-center gap-2 rounded-lg bg-white px-4 text-base font-medium text-zinc-900 shadow-sm ring-1 ring-zinc-950/5"
           >
             {t.viewSummary} <ArrowRight className="size-4" strokeWidth={1.5} />
           </button>
